@@ -1,7 +1,7 @@
 import Sidebar from '@/components/Sidebar'
-import About from './about/page'
 import './globals.css'
 import { Inter } from 'next/font/google'
+import Feed from '@/components/Feed'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
         <main className='flex min-h-screen max-w-7xl mx-auto'>
 
           <Sidebar />
+          <Feed />
         </main>
         {children}
       </body>
