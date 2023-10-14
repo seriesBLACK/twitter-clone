@@ -16,7 +16,7 @@ export default function Post({ post }) {
           <DotsHorizontalIcon className="h-5" />
         </div>
         <p>{post.text}</p>
-        <Image src={postImage} width="600" height="500"></Image>
+        <Image src={postImage} width="full" height="500"></Image>
         <div className="flex justify-between w-full mt-3">
           <ChatIcon className="h-5" />
           <HeartIcon className="h-5" />
