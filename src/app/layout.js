@@ -14,8 +14,15 @@ async function getData() {
   return res.json();
 };
 
+async function getRandomUsers() {
+  const randomUser = await fetch("https://randomuser.me/api/?results=30&inc=name,login,picture");
+
+  return randomUser.json();
+};
+
 export default async function RootLayout() {
-  const articles = await getData()
+  const articles = await getData();
+  const users = await getRandomUsers();
 
   return (
     <html lang="en">
@@ -24,7 +31,7 @@ export default async function RootLayout() {
 
           <Sidebar />
           <Feed />
-          <Widgets articles={articles.articles} />
+          <Widgets articles={articles.articles} users={users.results} />
         </main>
 
       </body>
