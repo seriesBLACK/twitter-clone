@@ -1,14 +1,13 @@
 "use client"
 import { signIn } from "next-auth/react"
-async function getProvider() {
-  const res = await fetch("http://localhost:3000/api/auth/providers");
-  return res.json()
-}
 
 
 
-export default async function page() {
-  const provider = await getProvider();
+
+export default function page() {
+  const signin = () => {
+    signIn("google", { callBackUrl: "/" });
+  }
 
   return (
     <div className="flex justify-center mt-20 space-x-4">
@@ -28,7 +27,7 @@ export default async function page() {
             This app is created for learning purposes
           </p>
           <button
-            onClick={() => signIn("google", { callBackUrl: "/" })}
+            onClick={signin}
             className="bg-red-400 rounded-lg p-3 text-white hover:bg-red-500"
           >
             Sign in with Google

@@ -1,4 +1,7 @@
-import './globals.css'
+import './globals.css';
+import SessionProvider from "../components/Providers"
+
+
 
 export const metadata = {
   title: 'twitter clone',
@@ -9,11 +12,15 @@ export const metadata = {
 
 
 export default async function RootLayout({ children }) {
-
   return (
     <html lang="en">
       <body>
-        {children}
+        <SessionProvider>
+
+          {children}
+        </SessionProvider>
+
+
       </body>
     </html>
   )

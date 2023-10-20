@@ -1,6 +1,12 @@
+"use client"
 import { EmojiHappyIcon, PhotographIcon } from "@heroicons/react/outline";
+import { useSession } from "next-auth/react";
 
 export default function Input() {
+  const { data: session } = useSession();
+
+  console.log(session)
+  console.log("session")
   return (
     <div className="w-full flex">
       <div className="w-[10%] p-4 border-r">
