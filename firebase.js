@@ -2,6 +2,7 @@ import { initializeApp, getApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDDod89jEYzfSfO7h28L9Wrvf4h043CfNs",
   authDomain: "twitter-80683.firebaseapp.com",
