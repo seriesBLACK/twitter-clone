@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react"
 
 export default function page() {
   const signin = () => {
-    signIn("google", { callBackUrl: "/" });
+    signIn("google", { callbackUrl: "/" });
   }
 
   return (
