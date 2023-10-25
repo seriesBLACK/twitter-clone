@@ -25,6 +25,7 @@ export default async function page() {
         <Sidebar />
         <Feed />
         <Widgets articles={articles.articles} users={users.results} />
+
       </main>
     </div>
   )

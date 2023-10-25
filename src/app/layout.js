@@ -1,5 +1,5 @@
 import './globals.css';
-import SessionProvider from "../components/Providers"
+import SessionProvider from "../components/Providers";
 
 
 
@@ -18,6 +18,8 @@ export default async function RootLayout({ children }) {
         <SessionProvider>
 
           {children}
+
+
         </SessionProvider>
 
 
