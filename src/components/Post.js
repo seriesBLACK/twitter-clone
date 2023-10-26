@@ -126,7 +126,7 @@ export default function Post({ post, id }) {
         </div>
 
         {/* post text */}
-        <Link href={`posts/${id}`}>
+        <Link href={`/posts/${id}`}>
           <p className="text-gray-800 text-[15px sm:text-[16px] mb-2">{post?.data().text}</p>
         </Link>
 

@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
 import Post from '@/components/Post';
 import { useEffect, useState } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { collection, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../../../firebase';
+import Comment from '@/components/Comment';
 
 
 
@@ -15,11 +16,10 @@ import { db } from '../../../../firebase';
 
 export default function page({ params }) {
   const id = params.id;
-  // const articles = await getData();
-  // const users = await getRandomUsers();
   const [post, setPost] = useState();
-  const [articles, setArticles] = useState()
-  const [users, setUsers] = useState()
+  const [articles, setArticles] = useState();
+  const [users, setUsers] = useState();
+  const [comments, setComments] = useState([]);
 
 
   async function getData() {
@@ -33,10 +33,18 @@ export default function page({ params }) {
     setUsers(await randomUser.json());
   };
 
+  //get post data
   useEffect(() =>
     onSnapshot(doc(db, "posts", id), (snapshot) => setPost(snapshot))
     , [id]);
 
+
+
+  useEffect(() => {
+    onSnapshot(query(collection(db, "posts", id, "comments"), orderBy("timestamp", "desc")), (snapshot) => setComments(snapshot.docs))
+  }, [comments])
+
+  //get widgets data
   useEffect(() => {
     getData();
     getRandomUsers();
@@ -61,6 +69,13 @@ export default function page({ params }) {
             </div>
           </div>
           <Post post={post} id={id} />
+          {comments.length > 0 && (
+            <div>
+              {comments.map((comment) => (
+                <Comment key={comment.id} id={comment.id} comment={comment.data()} />
+              ))}
+            </div>
+          )}
         </div>
         <Widgets articles={articles?.articles} users={users?.results} />
 
