@@ -1,3 +1,4 @@
+"use clinet"
 import {
   ChartBarIcon,
   ChatIcon,
@@ -18,6 +19,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import Link from 'next/link';
 import { db, storage } from "../../firebase";
 
 import { useState, useEffect } from "react";
@@ -26,13 +28,15 @@ import { signIn, useSession } from "next-auth/react";
 
 
 export default function Post({ post, id }) {
+
   const [likes, setLikes] = useState([]);
   const { data: session } = useSession();
   const [comments, setComments] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
-  const [postId, setPostId] = useState("1");
   const [showInput, setShowInput] = useState(false);
   const [commentInput, setCommentInput] = useState("");
+
+
 
 
 
@@ -52,9 +56,9 @@ export default function Post({ post, id }) {
 
   //get comments for the spicfied post 
   useEffect(() => onSnapshot(
-    doc(db, "posts", postId), (snapshot) => { setComments(snapshot) }
+    collection(db, "posts", id, "comments"), (snapshot) => setComments(snapshot.docs)
   )
-    , [postId])
+    , [id]);
 
   async function likePost() {
     if (session) {
@@ -69,7 +73,7 @@ export default function Post({ post, id }) {
   }
 
   async function sendComment() {
-    await addDoc(collection(db, "posts", postId, "comments"), {
+    await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentInput,
       name: session.user.name,
       username: session.user.username,
@@ -77,6 +81,8 @@ export default function Post({ post, id }) {
       timestamp: serverTimestamp(),
     })
     setShowInput(false);
+    setCommentInput("");
+
   };
 
   async function deletePost() {
@@ -120,12 +126,9 @@ export default function Post({ post, id }) {
         </div>
 
         {/* post text */}
-
-        <p
-          className="text-gray-800 text-[15px sm:text-[16px] mb-2"
-        >
-          {post?.data().text}
-        </p>
+        <Link href={`posts/${id}`}>
+          <p className="text-gray-800 text-[15px sm:text-[16px] mb-2">{post?.data().text}</p>
+        </Link>
 
         {/* post image */}
 
@@ -139,16 +142,17 @@ export default function Post({ post, id }) {
 
         <div className="flex justify-between text-gray-500 p-2">
           <div className="flex items-center select-none">
+
             <ChatIcon onClick={() => {
               if (!session) {
                 signIn();
               } else {
-                setPostId(post.id);
                 setShowInput(!showInput);
               };
             }
             } className="h-9 w-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100"
             />
+            {comments.length > 0 && (<span>{comments.length}</span>)}
           </div>
           {session?.user.uid === post?.data()?.id && (
             <TrashIcon
@@ -183,25 +187,29 @@ export default function Post({ post, id }) {
         </div>
         {showInput && (
           <>
-            <div className="mb-3">
-              <div className="flex items-center space-x-1 relative">
-                <span className="w-0.5 h-full z-[-1] absolute bg-gray-300 left-6" />
-                <img
-                  className="h-11 w-11 rounded-full mr-4"
-                  src={comments?.data()?.userImage}
-                  alt="user-img"
-                />
-                <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline">
-                  {comments?.data()?.name}
-                </h4>
-                <span className="text-sm sm:text-[15px]">
-                  @{comments?.data()?.username}
-                </span>
-                {/* <span className="text-sm sm:text-[15px] hover:underline">
-                  <Moment fromNow>{comments?.data().timestamp?.toDate()}</Moment>
-                </span> */}
+            {comments && (
+
+
+              <div className="mb-3">
+                <div className="flex items-center space-x-1 relative">
+                  <img
+                    className="h-11 w-11 rounded-full mr-4"
+                    src={session?.user?.image}
+                    alt="user-img"
+                  />
+                  <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline">
+                    {session?.user?.name}
+                  </h4>
+                  <span className="text-sm sm:text-[15px]">
+                    @{session?.user?.username}
+                  </span>
+                  <span className="text-sm sm:text-[15px] hover:underline">
+                    <Moment fromNow>{comments?.timestamp?.toDate()}</Moment>
+                  </span>
+                </div>
+                <h2>{comments.comment}</h2>
               </div>
-            </div>
+            )}
 
 
             <div className="flex p-3 space-x-3">
@@ -232,6 +240,7 @@ export default function Post({ post, id }) {
                 </div>
               </div>
             </div>
+
 
           </>
         )}
