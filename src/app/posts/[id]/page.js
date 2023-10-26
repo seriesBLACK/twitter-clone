@@ -70,9 +70,9 @@ export default function page({ params }) {
           </div>
           <Post post={post} id={id} />
           {comments.length > 0 && (
-            <div>
+            <div className=''>
               {comments.map((comment) => (
-                <Comment key={comment.id} id={comment.id} comment={comment.data()} />
+                <Comment key={comment.id} postId={id} comment={comment} />
               ))}
             </div>
           )}
