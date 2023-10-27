@@ -48,7 +48,7 @@ export default function Page({ params }) {
   useEffect(() => {
     getData();
     getRandomUsers();
-  })
+  }, [])
 
 
 
