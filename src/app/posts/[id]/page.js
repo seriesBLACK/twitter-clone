@@ -14,7 +14,7 @@ import Comment from '@/components/Comment';
 
 
 
-export default function page({ params }) {
+export default function Page({ params }) {
   const id = params.id;
   const [post, setPost] = useState();
   const [articles, setArticles] = useState();
@@ -48,7 +48,7 @@ export default function page({ params }) {
   useEffect(() => {
     getData();
     getRandomUsers();
-  }, [])
+  })
 
 
 
